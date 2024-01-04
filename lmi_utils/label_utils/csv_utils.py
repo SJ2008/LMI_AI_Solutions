@@ -84,6 +84,18 @@ def load_csv(fname:str, path_img:str='', class_map:dict=None, zero_index:bool=Tr
                     shapes[im_name].append(R)
                 else:
                     raise Exception(f"invalid keywords: {coord_type}")
+            # SJ: added on 1/4/2024
+            elif shape_type=='polyline':
+                if coord_type=='x values':
+                    M = mask.Mask(im_name=im_name, fullpath=fullpath, category=category, confidence=confidence)
+                    M.X = list(map(int,coordinates))
+                elif coord_type=='y values':
+                    assert(im_name==M.im_name)
+                    M.Y = list(map(int,coordinates))
+                    shapes[im_name].append(M)
+                else:
+                    raise Exception(f"invalid keywords: {coord_type}")
+            # SJ: END
     return shapes, class_map
 
 
