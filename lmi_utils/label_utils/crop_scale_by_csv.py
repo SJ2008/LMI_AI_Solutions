@@ -71,6 +71,13 @@ def crop_scale(input_data_dir,input_csv_path,output_data_dir,output_csv_path,all
                             y_vec=np.asarray([ul[1],ul[1],lr[1],lr[1]])
                             pts=np.stack((x_vec,y_vec),axis=1)
                             label_types.append('rect')
+                        #SJ: added on 1/4/2024
+                        elif current_labels[i]['shape']=='polyline':
+                            x_vec=current_labels[i]['x_values']
+                            y_vec=current_labels[i]['y_values']
+                            pts=np.stack((x_vec,y_vec),axis=1)
+                            label_types.append('polyline')
+                        #SJ: END
                         else:
                             raise Exception('Unknown object shape.')
                         old_objects.append(pts)
@@ -104,6 +111,11 @@ def crop_scale(input_data_dir,input_csv_path,output_data_dir,output_csv_path,all
                                 lr=[xj[2],yj[2]]
                                 rowWriter.writerow([fname,label,'1.0','rect','upper left']+ul)
                                 rowWriter.writerow([fname,label,'1.0','rect','lower right']+lr)
+                            #SJ: added on 1/4/2024
+                            elif label_type=='polyline':
+                                rowWriter.writerow([fname,label,'1.0','polyline','x values']+xj)
+                                rowWriter.writerow([fname,label,'1.0','polyline','y values']+yj)
+                            #SJ: END
                             else:
                                 raise Exception('Unknown object shape.')
                             # plot 
