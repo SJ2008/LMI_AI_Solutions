@@ -116,9 +116,11 @@ def write_to_csv(shapes:dict, filename:str):
                 elif isinstance(shape, mask.Mask):
                     writer.writerow([shape.im_name, shape.category, f'{shape.confidence:.4f}', 'polygon', 'x values'] + shape.X)
                     writer.writerow([shape.im_name, shape.category, f'{shape.confidence:.4f}', 'polygon', 'y values'] + shape.Y)
+		# SJ: added on 1/4/2024
                 elif isinstance(shape, polyline.Polyline):
                     writer.writerow([shape.im_name, shape.category, f'{shape.confidence:.4f}', 'polyline', 'x values'] + shape.X)
                     writer.writerow([shape.im_name, shape.category, f'{shape.confidence:.4f}', 'polyline', 'y values'] + shape.Y)
+		# SJ: END
                 else:
                     raise Exception("Found unsupported classes. Supported classes are mask and rect")
                     
