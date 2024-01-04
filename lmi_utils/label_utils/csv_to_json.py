@@ -28,6 +28,14 @@ def csv_to_json(input_csv,output_json):
                 'all_points_x':xvals,\
                 'all_points_y':yvals},\
                 'region_attributes':{'Name':label['obj_class']}} )
+        elif label['shape'] == 'polyline':
+            xvals=[int(val) for val in label['x_values']]
+            yvals=[int(val) for val in label['y_values']]
+            output_dict[label['image_file']]['regions'].append({'shape_attributes':{\
+                'name':'polyline',\
+                'all_points_x':xvals,\
+                'all_points_y':yvals},\
+                'region_attributes':{'Name':label['obj_class']}} )
         elif label['shape'] == 'rect':
             x=label['upper_left'][0]
             y=label['upper_left'][1]
