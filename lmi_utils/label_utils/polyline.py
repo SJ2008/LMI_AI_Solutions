@@ -1,4 +1,3 @@
-#SJ: added 1/4/2024
 from label_utils.shape import Shape
 
 class Polyline(Shape):
@@ -19,4 +18,3 @@ class Polyline(Shape):
         self.X = x_vals
         self.Y = y_vals
         self.confidence = confidence
-#SJ: END
