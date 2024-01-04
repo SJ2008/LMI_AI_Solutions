@@ -13,6 +13,7 @@ import os
 from label_utils.csv_utils import load_csv
 from label_utils.mask import Mask
 from label_utils.rect import Rect
+from label_utils.polyline import Polyline
 
 
 def convert_to_txt(fname_to_shapes, class_to_id, target_classes:list, is_seg=False, is_convert=False):
@@ -73,6 +74,24 @@ def convert_to_txt(fname_to_shapes, class_to_id, target_classes:list, is_seg=Fal
                     cx,cy = (x0+x2)/2, (y0+y2)/2
                     row = [class_id, cx/W, cy/H, w/W, h/H]
                     rows.append(row)
+            #SJ: added on 1/4/2024
+            elif isinstance(shape, Polyline):
+                if is_seg:
+                    xyxy = []
+                    for x,y in zip(shape.X,shape.Y):
+                        xyxy += [x/W,y/H]
+                    row = [class_id]+xyxy
+                    rows.append(row)
+                elif is_convert:
+                    # mask-to-bbox
+                    x0,y0 = min(shape.X),min(shape.Y)
+                    x2,y2 = max(shape.X),max(shape.Y)
+                    w = x2 - x0 + 1
+                    h = y2 - y0 + 1
+                    cx,cy = (x0+x2)/2, (y0+y2)/2
+                    row = [class_id, cx/W, cy/H, w/W, h/H]
+                    rows.append(row)
+            #SJ: END
         txt_name = fname.replace('.png','.txt').replace('.jpg','.txt')
         fname_to_rows[txt_name] = rows
     return fname_to_rows
