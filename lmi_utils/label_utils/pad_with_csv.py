@@ -5,7 +5,7 @@ import numpy as np
 import logging
 
 #LMI packages
-from label_utils import rect, mask
+from label_utils import rect, mask, polyline
 from label_utils.csv_utils import load_csv, write_to_csv
 from gadget_utils.pipeline_utils import fit_array_to_size
 
@@ -115,6 +115,18 @@ def chop_shapes(shapes, W, H):
                 or (np.any(new_X==0) and np.all(X!=0)) or (np.any(new_Y==0) and np.all(Y!=0)):
                 logger.warning(f'polygon {[(x,y) for x,y in zip(new_X,new_Y)]} is chopped to fit the size [{W}, {H}]')
                 is_warning = True
+        elif isinstance(shape, polyline.Polyline):
+            X,Y = np.array(shape.X), np.array(shape.Y)
+            new_X = np.clip(X, a_min=0, a_max=W)
+            new_Y = np.clip(Y, a_min=0, a_max=H)
+            shapes[i].X,shapes[i].Y = new_X.tolist(),new_Y.tolist()
+            if np.all(new_X==W) or np.all(new_Y==H) or np.all(new_X==0) or np.all(new_Y==0):
+                is_del = 1
+                logger.warning(f'polyline {[(x,y) for x,y in zip(new_X,new_Y)]} is outside of the size [{W},{H}]')
+            elif (np.any(new_X==W) and np.all(X!=W)) or (np.any(new_Y==H) and np.all(Y!=H)) \
+                or (np.any(new_X==0) and np.all(X!=0)) or (np.any(new_Y==0) and np.all(Y!=0)):
+                logger.warning(f'polyline {[(x,y) for x,y in zip(new_X,new_Y)]} is chopped to fit the size [{W}, {H}]')
+                is_warning = True
         if is_del:
             is_warning = True
             to_del.append(i)
@@ -139,6 +151,9 @@ def fit_shapes_to_size(shapes, pad_l, pad_t):
             shape.bottom_right[0] += pad_l
             shape.bottom_right[1] += pad_t
         elif isinstance(shape, mask.Mask):
+            shape.X = [v+pad_l for v in shape.X]
+            shape.Y = [v+pad_t for v in shape.Y]
+        elif isinstance(shape, polyline.Polyline):
             shape.X = [v+pad_l for v in shape.X]
             shape.Y = [v+pad_t for v in shape.Y]
     return shapes
