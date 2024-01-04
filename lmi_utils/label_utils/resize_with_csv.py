@@ -64,6 +64,7 @@ def resize_imgs_with_csv(path_imgs, path_csv, output_imsize, path_out, save_bg_i
             
             name_to_im[out_name] = im2
             for i in range(len(shapes[im_name])):
+                logger.warning(f'{shapes[im_name][i]} {out_name}')
                 if isinstance(shapes[im_name][i], rect.Rect):
                     x,y = shapes[im_name][i].up_left
                     shapes[im_name][i].up_left = [int(x*rx), int(y*ry)]
