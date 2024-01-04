@@ -9,7 +9,7 @@ import numpy as np
 import cv2
 
 #LMI packages
-from label_utils import mask, rect, csv_utils
+from label_utils import mask, rect, csv_utils, polyline
 
 
 logging.basicConfig()
@@ -42,6 +42,14 @@ def rot90_shape(shape,h,w):
         shape.up_left = rot90(x1,y1,h,w)
         shape.bottom_right = rot90(x3,y3,h,w)
     elif isinstance(shape, mask.Mask):
+        new_x,new_y = [],[]
+        for x,y in zip(shape.X,shape.Y):
+            nx,ny = rot90(x,y,h,w)
+            new_x.append(nx)
+            new_y.append(ny)
+        shape.X = new_x
+        shape.Y = new_y
+    elif isinstance(shape, polyline.Polyline):
         new_x,new_y = [],[]
         for x,y in zip(shape.X,shape.Y):
             nx,ny = rot90(x,y,h,w)
