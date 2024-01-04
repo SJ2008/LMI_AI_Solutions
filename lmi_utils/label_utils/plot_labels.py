@@ -6,7 +6,7 @@ import json
 
 #LMI packages
 from label_utils.csv_utils import load_csv
-from label_utils import rect, mask
+from label_utils import rect, mask, polyline
 from label_utils.plot_utils import plot_one_box, plot_one_polygon
 
 
@@ -59,6 +59,10 @@ if __name__ == '__main__':
                 box = shape.up_left + shape.bottom_right
                 plot_one_box(box, im, label=shape.category, color=color_map[shape.category])
             elif isinstance(shape, mask.Mask):
+                pts = np.array([[x,y] for x,y in zip(shape.X,shape.Y)])
+                pts = pts.reshape((-1, 1, 2))
+                plot_one_polygon(pts, im, label=shape.category, color=color_map[shape.category])
+            elif isinstance(shape, polyline.Polyline):
                 pts = np.array([[x,y] for x,y in zip(shape.X,shape.Y)])
                 pts = pts.reshape((-1, 1, 2))
                 plot_one_polygon(pts, im, label=shape.category, color=color_map[shape.category])
