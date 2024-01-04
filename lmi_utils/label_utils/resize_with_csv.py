@@ -74,6 +74,12 @@ def resize_imgs_with_csv(path_imgs, path_csv, output_imsize, path_out, save_bg_i
                     shapes[im_name][i].X = [int(v*rx) for v in shapes[im_name][i].X]
                     shapes[im_name][i].Y = [int(v*ry) for v in shapes[im_name][i].Y]
                     shapes[im_name][i].im_name = out_name
+                #SJ: added on 1/4/2024
+                elif isinstance(shapes[im_name][i], polyline.Polyline):
+                    shapes[im_name][i].X = [int(v*rx) for v in shapes[im_name][i].X]
+                    shapes[im_name][i].Y = [int(v*ry) for v in shapes[im_name][i].Y]
+                    shapes[im_name][i].im_name = out_name
+                #SJ: END
                 else:
                     raise Exception("Found unsupported classes. Supported classes are mask and rect")
     if cnt_bg:
