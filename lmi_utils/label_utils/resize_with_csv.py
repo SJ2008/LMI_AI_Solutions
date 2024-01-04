@@ -8,7 +8,7 @@ import logging
 import cv2
 
 #LMI packages
-from label_utils import mask, rect, csv_utils
+from label_utils import mask, rect, csv_utils, polyline
 
 
 logging.basicConfig()
