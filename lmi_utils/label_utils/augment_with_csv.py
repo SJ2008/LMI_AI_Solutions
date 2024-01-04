@@ -51,6 +51,14 @@ def augment_imgs_with_csv(path_imgs:str, path_csv:str, path_out:str, pixel_mul:f
                     temp = copy.deepcopy(shapes[im_name][i])
                     temp.im_name = out_name
                     new_shapes[out_name].append(temp)
+                #SJ: added on 1/4/2024
+                elif isinstance(shapes[im_name][i], polyline.Polyline):
+                    #shapes[im_name][i].X = [int(v*ratio) for v in shapes[im_name][i].X]
+                    #shapes[im_name][i].Y = [int(v*ratio) for v in shapes[im_name][i].Y]
+                    temp = copy.deepcopy(shapes[im_name][i])
+                    temp.im_name = out_name
+                    new_shapes[out_name].append(temp)
+                #SJ: END
                 else:
                     raise Exception("Found unsupported classes. Supported classes are mask and rect")
     return new_shapes
