@@ -63,6 +63,7 @@ def resize_imgs_with_csv(path_imgs, path_csv, output_imsize, path_out, save_bg_i
             cv2.imwrite(os.path.join(path_out,out_name), im2)
             
             name_to_im[out_name] = im2
+            logger.warning(f'{len(shapes[im_name])}')
             for i in range(len(shapes[im_name])):
                 logger.warning(f'{shapes[im_name][i]} {out_name}')
                 if isinstance(shapes[im_name][i], rect.Rect):
