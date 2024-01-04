@@ -108,6 +108,18 @@ class Dataset(object):
                         rects[fname]['category'].append(row[1])
                         rects[fname]['iscrowd'].append(iscrowd)
                         rects[fname]['image_id'].append(self.imgfile2id[fname])
+                #SJ: added on 1/4/2024
+                elif row[3]=='polyline':
+                    if fname not in masks:
+                        masks[fname] = collections.defaultdict(list)
+                    if row[4]=='x values':
+                        if 'x' not in masks:
+                            masks[fname]['x'].append(row[5:])
+                    if row[4]=='y values':
+                            masks[fname]['y'].append(row[5:])
+                            masks[fname]['category'].append(row[1])
+                            masks[fname]['iscrowd'].append(iscrowd)
+                            masks[fname]['image_id'].append(self.imgfile2id[fname])
         #generate coco annotations
         for fname in masks:
             mask = masks[fname]
