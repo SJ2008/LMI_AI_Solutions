@@ -22,6 +22,10 @@ def annotate(image, regions):
             a = list(zip(region['shape_attributes']['all_points_x'],region['shape_attributes']['all_points_y']))
             polygon = np.array(a)
             new_image = cv2.polylines(new_image, [polygon], True, (0,255,0), thickness=1)
+        if shape == 'polyline':
+            a = list(zip(region['shape_attributes']['all_points_x'],region['shape_attributes']['all_points_y']))
+            polygon = np.array(a)
+            new_image = cv2.polylines(new_image, [polygon], True, (0,255,0), thickness=1)
         if shape == 'rect':
             new_image = cv2.rectangle(new_image, 
                                     (region['shape_attributes']['x'], region['shape_attributes']['y']), 
@@ -65,6 +69,17 @@ def scretch_to_edges(imgs_path, input_json, object_labels, output_json, distance
                 continue            
             shape = region['shape_attributes']['name']
             if shape == 'polygon':
+                xs = region['shape_attributes']['all_points_x']
+                xs = [0 if abs(x-0)<distance_x else x for x in xs]
+                xs = [w if abs(w-x)<distance_x else x for x in xs]
+
+                ys = region['shape_attributes']['all_points_y']
+                ys = [0 if abs(y-0)<distance_y else y for y in ys]
+                ys = [h if abs(h-y)<distance_y else y for y in ys]
+
+                region['shape_attributes']['all_points_x'] = xs
+                region['shape_attributes']['all_points_y'] = ys
+            elif shape == 'polyline':
                 xs = region['shape_attributes']['all_points_x']
                 xs = [0 if abs(x-0)<distance_x else x for x in xs]
                 xs = [w if abs(w-x)<distance_x else x for x in xs]
