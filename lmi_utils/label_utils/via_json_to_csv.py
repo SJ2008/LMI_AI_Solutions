@@ -95,6 +95,23 @@ def extract_ROI_from_JSON(data_folder_path,output_csv_file_name,label_name='Name
                             yj=(cy-radius*np.sin(phi)).astype(int)
                             labelWriter.writerow([fname,label,'1.0','polygon','x values']+list(xj))
                             labelWriter.writerow([fname,label,'1.0','polygon','y values']+list(yj))
+                        # test for polyline region: added on 1/4/2024
+                        elif regions[j]['shape_attributes']['name']=='polyline':
+                            xj=regions[j]['shape_attributes']['all_points_x']
+                            yj=regions[j]['shape_attributes']['all_points_y']
+                            if mask_to_bbox:
+                                print('[INFO] Writing bounding box from mask region: ',label)
+                                xj=np.array(xj,dtype=np.int32)
+                                yj=np.array(yj,dtype=np.int32)
+                                x_ul=xj.min()
+                                y_ul=yj.min()
+                                x_lr=xj.max()
+                                y_lr=yj.max()
+                                labelWriter.writerow([fname,label,'1.0','rect','upper left',x_ul,y_ul])
+                                labelWriter.writerow([fname,label,'1.0','rect','lower right',x_lr,y_lr])
+                            else:         
+                                labelWriter.writerow([fname,label,'1.0','polyline','x values']+xj)
+                                labelWriter.writerow([fname,label,'1.0','polyline','y values']+yj)
                         else:
                             raise Exception('Unsupported label type.  polygon and rect supported.')
 
