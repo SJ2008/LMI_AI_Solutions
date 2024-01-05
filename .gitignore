@@ -1,0 +1,23 @@
+#ignore files
+*.pyc
+
+#pytorch weights
+*.pt
+
+#ignore folders
+**.vscode
+**/data
+**/.ipynb_checkpoints
+**/validation
+**/training
+**/weights
+**/wandb
+**/trained-inference-models
+**/pretrained-models
+**/records
+**/venv
+**/testfiles
+**/logs
+**/temp
+config
+**/untracked-data
